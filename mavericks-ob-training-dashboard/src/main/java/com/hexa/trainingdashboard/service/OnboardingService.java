@@ -25,7 +25,7 @@ public class OnboardingService {
 	
 	public String generateOnBoardingPlan(FresherProfile fresherProfile) {
 		ChatMessage systemMessage  = new ChatMessage(ChatRole.SYSTEM).setContent("You are an AI assistant that generates personal onboarding plans in IT company");
-		ChatMessage userMessage = new ChatMessage(ChatRole.USER).setContent("Create a personalized onboarding plan for the following profile: "+fresherProfile);
+		ChatMessage userMessage = new ChatMessage(ChatRole.USER).setContent("Create a personalized onboarding plan for the following fresher profile: "+fresherProfile);
 		ChatCompletionsOptions options = new ChatCompletionsOptions(List.of(systemMessage,userMessage)).setMaxTokens(500);
 		return aiClient.getChatCompletions("gpt-4", options).getChoices().get(0).getMessage().getContent();
 	}
