@@ -24,7 +24,7 @@ public class AssessmentService {
 	
 
 	public Assessment evaluateAssessment(Assessment assessment) {
-		ChatMessage message = new ChatMessage(ChatRole.USER).setContent("Evaluate this assessment: "+ assessment);
+		ChatMessage message = new ChatMessage(ChatRole.USER).setContent("Generate feedback on strengths and areas of improvement based on the assessment scores. "+ assessment);
 		ChatCompletionsOptions options = new ChatCompletionsOptions(List.of(message));
 		String feedback = aiClient.getChatCompletions("gpt-4", options).getChoices().get(0).getMessage().getContent();
 		assessment.setFeedback(feedback);
