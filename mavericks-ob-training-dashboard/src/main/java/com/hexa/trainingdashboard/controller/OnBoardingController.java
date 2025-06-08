@@ -32,12 +32,13 @@ public class OnBoardingController {
 	}
 	
 	@GetMapping("/generate-plan/{id}")
-	public String generateOnboardingPlan(@PathVariable Long id) {
+	public String generateOnboardingPlan(@PathVariable("id") Long id) {
 		Optional<FresherProfile> optionalProfile = fresherProfileRepository.findById(id);
 		if(optionalProfile.isEmpty()) {
 			throw new RuntimeException("FresherProfile with ID "+ id +" not found.");
 		}
 		FresherProfile profile = optionalProfile.get();
+		System.out.println(onboardingService.generateOnBoardingPlan(profile));
 		return onboardingService.generateOnBoardingPlan(profile);
 	}
 	
