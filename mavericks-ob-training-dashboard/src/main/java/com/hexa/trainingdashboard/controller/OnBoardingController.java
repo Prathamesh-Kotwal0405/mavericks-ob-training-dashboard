@@ -38,8 +38,9 @@ public class OnBoardingController {
 			throw new RuntimeException("FresherProfile with ID "+ id +" not found.");
 		}
 		FresherProfile profile = optionalProfile.get();
-		System.out.println(onboardingService.generateOnBoardingPlan(profile));
-		return onboardingService.generateOnBoardingPlan(profile);
+		String plan = onboardingService.generateOnBoardingPlan(profile);
+		onboardingService.setTrainingSchedule(profile, plan);
+		return "Successfully generated onboarding plan for required fresher id";
 	}
 	
 }

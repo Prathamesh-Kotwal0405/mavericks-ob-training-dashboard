@@ -25,5 +25,10 @@ public class OnboardingService {
 		return fresherProfileRepository.save(fresherProfile);
 	}
 	
+	public FresherProfile setTrainingSchedule(FresherProfile fresherProfile, String plan) {
+		fresherProfile.setTrainingSchedule(plan);
+		return fresherProfileRepository.save(fresherProfile);
+	}
+	
 	
 }
