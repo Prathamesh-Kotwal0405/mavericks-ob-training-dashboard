@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexa.trainingdashboard.model.FresherProfile;
 import com.hexa.trainingdashboard.repository.FresherProfileRepository;
 import com.hexa.trainingdashboard.service.OnboardingService;
@@ -42,6 +43,17 @@ public class OnBoardingController {
 		String plan = onboardingService.generateOnBoardingPlan(profile);
 		onboardingService.setTrainingSchedule(profile, plan);
 		return "Successfully generated onboarding plan for required fresher id";
+	}
+	
+	@GetMapping("/getProfile/{id}")
+	public String getFresherProfileById(@PathVariable("id") Long id) throws JsonProcessingException {
+		Optional<FresherProfile> optionalProfile = fresherProfileRepository.findById(id);
+		if(optionalProfile.isPresent()) {
+			ObjectMapper mapper = new ObjectMapper();
+			String prettyJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(optionalProfile.get());
+			return prettyJson;
+		}
+		return "No data found for given fresher id";
 	}
 	
 }
