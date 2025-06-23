@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hexa.trainingdashboard.model.FresherProfile;
 import com.hexa.trainingdashboard.repository.FresherProfileRepository;
 import com.hexa.trainingdashboard.service.OnboardingService;
@@ -32,7 +33,7 @@ public class OnBoardingController {
 	}
 	
 	@GetMapping("/generate-plan/{id}")
-	public String generateOnboardingPlan(@PathVariable("id") Long id) {
+	public String generateOnboardingPlan(@PathVariable("id") Long id) throws JsonProcessingException {
 		Optional<FresherProfile> optionalProfile = fresherProfileRepository.findById(id);
 		if(optionalProfile.isEmpty()) {
 			throw new RuntimeException("FresherProfile with ID "+ id +" not found.");
