@@ -21,12 +21,13 @@ public class AzureOpenAIService {
 	private final RestTemplate restTemplate = new RestTemplate();
 
     // Replace with your actual values
-    private final String endpoint = "https://byte-bandits-openai.openai.azure.com/";
+    private final String endpoint = "https://byte-bandits.openai.azure.com/";
     private final String deploymentName = "gpt-4"; // e.g., gpt-4
-    private final String apiKey = "BaFepo7sCSKXvDyG0UV7k1wwwINI0V47Ukp29ryK0IWnvmVgwFi5JQQJ99BFACYeBjFXJ3w3AAABACOGPFpQ";
+    private final String apiKey = "9DN59Ar9W5o5gMBf2NBjFMSpd3WqK4OS8UiIlBzhZTsay9dKQb47JQQJ99BFACYeBjFXJ3w3AAABACOGw7Jm";
     private final String apiVersion = "2025-01-01-preview";
 
     public String getResponseFromModel(String prompt) {
+//    	https://byte-bandits.openai.azure.com/openai/deployments/gpt-4/chat/completions?api-version=2025-01-01-preview
         String url = endpoint+"openai/deployments/"+deploymentName+"/chat/completions?api-version="+apiVersion;
 
         HttpHeaders headers = new HttpHeaders();
