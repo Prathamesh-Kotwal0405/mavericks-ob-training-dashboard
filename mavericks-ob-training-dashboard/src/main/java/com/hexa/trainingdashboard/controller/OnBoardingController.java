@@ -2,6 +2,7 @@ package com.hexa.trainingdashboard.controller;
 
 import java.util.Optional;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import com.hexa.trainingdashboard.service.OnboardingService;
 
 @RestController
 @RequestMapping("/api/onboarding")
+@CrossOrigin(origins = "http://localhost:5173")
 public class OnBoardingController {
 	
 	private final OnboardingService onboardingService;

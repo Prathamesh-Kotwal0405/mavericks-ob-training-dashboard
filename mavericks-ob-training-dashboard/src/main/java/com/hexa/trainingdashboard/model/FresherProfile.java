@@ -1,10 +1,12 @@
 package com.hexa.trainingdashboard.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class FresherProfile {
@@ -18,6 +20,11 @@ public class FresherProfile {
 	private String role;
 	@Lob
 	private String trainingSchedule;
+	
+	@OneToOne(mappedBy = "fresher", cascade = CascadeType.ALL)
+    private TrainingProgress trainingProgress;
+	
+	
 	public String getName() {
 		return name;
 	}
@@ -42,10 +49,25 @@ public class FresherProfile {
 	public void setTrainingSchedule(String trainingSchedule) {
 		this.trainingSchedule = trainingSchedule;
 	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public FresherProfile() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	public TrainingProgress getTrainingProgress() {
+		return trainingProgress;
+	}
+	public void setTrainingProgress(TrainingProgress trainingProgress) {
+		this.trainingProgress = trainingProgress;
+	}
+	
+	
+	
 	
 	
 }

@@ -5,19 +5,23 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexa.trainingdashboard.model.FresherProfile;
+import com.hexa.trainingdashboard.model.TrainingProgress;
 import com.hexa.trainingdashboard.repository.FresherProfileRepository;
+import com.hexa.trainingdashboard.repository.TrainingProgressRepository;
 
 @Service
 public class OnboardingService {
 	
 	private final FresherProfileRepository fresherProfileRepository;
+	private final TrainingProgressRepository trainingProgressRepository;
 //	private final OllamaService ollamaService;
 	private final AzureOpenAIService aiService;
 	
-	public OnboardingService(FresherProfileRepository fresherProfileRepository, AzureOpenAIService aiService) {
+	public OnboardingService(FresherProfileRepository fresherProfileRepository, AzureOpenAIService aiService, TrainingProgressRepository trainingProgressRepository ) {
 		super();
 		this.fresherProfileRepository = fresherProfileRepository;
 		this.aiService = aiService;
+		this.trainingProgressRepository = trainingProgressRepository;
 	}
 	
 	public String generateOnBoardingPlan(FresherProfile fresherProfile) throws JsonProcessingException {
@@ -48,8 +52,14 @@ public class OnboardingService {
 		return aiService.getResponseFromModel(prompt);
 	}
 	
-	public FresherProfile saveProfile(FresherProfile fresherProfile) {
-		return fresherProfileRepository.save(fresherProfile);
+	public FresherProfile saveProfile(FresherProfile fresherProfile) {	
+		// Create and link TrainingProgress
+	    TrainingProgress progress = new TrainingProgress();
+	    progress.setFresher(fresherProfile); // Link fresher to progress
+	    fresherProfile.setTrainingProgress(progress); // Link progress to fresher
+
+	    // Save fresher only. Hibernate will save progress automatically.
+	    return fresherProfileRepository.save(fresherProfile);
 	}
 	
 	public FresherProfile setTrainingSchedule(FresherProfile fresherProfile, String plan) {
