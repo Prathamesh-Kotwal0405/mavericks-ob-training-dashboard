@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.hexa.trainingdashboard.dto.AssessmentDto;
 import com.hexa.trainingdashboard.model.Assessment;
 import com.hexa.trainingdashboard.repository.AssessmentRepository;
@@ -21,7 +24,7 @@ import com.hexa.trainingdashboard.service.AssessmentService;
 
 @RestController
 @RequestMapping("/api/assessments")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*",methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT})
 public class AssessmentController {
 	
 	private final AssessmentService assessmentService;
@@ -34,7 +37,7 @@ public class AssessmentController {
 	
 	@GetMapping("{id}")
 	public String evaluateAssessment(@PathVariable("id") Long id) throws JsonProcessingException {
-		Optional<Assessment> optionalAssessment = assessmentRepository.findById(id);
+		Optional<Assessment> optionalAssessment = assessmentRepository.findByFresherId(id);
 		if(optionalAssessment.isEmpty()) {
 			throw new RuntimeException("FresherProfile with ID "+ id +" not found.");
 		}
@@ -57,6 +60,8 @@ public class AssessmentController {
 			Optional<Assessment> optionalAssessment = assessmentRepository.findByFresherId(id);
 			if(optionalAssessment.isPresent()) {
 				ObjectMapper mapper = new ObjectMapper();
+				mapper.registerModule(new JavaTimeModule());
+		        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 				String prettyJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(optionalAssessment.get());
 				return prettyJson;
 			}

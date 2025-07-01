@@ -8,17 +8,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hexa.trainingdashboard.dto.LoginRequest;
 import com.hexa.trainingdashboard.model.FresherProfile;
 import com.hexa.trainingdashboard.repository.FresherProfileRepository;
 import com.hexa.trainingdashboard.service.OnboardingService;
 
 @RestController
 @RequestMapping("/api/onboarding")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*",methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT})
 public class OnBoardingController {
 	
 	private final OnboardingService onboardingService;
@@ -56,6 +58,11 @@ public class OnBoardingController {
 			return prettyJson;
 		}
 		return "No data found for given fresher id";
+	}
+	
+	@PostMapping("/login")
+	public FresherProfile login(@RequestBody LoginRequest request) {
+	    return onboardingService.login(request.getEmail(), request.getPassword());
 	}
 	
 }

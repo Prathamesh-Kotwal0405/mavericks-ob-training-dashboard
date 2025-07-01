@@ -18,6 +18,8 @@ public class FresherProfile {
 	private String name;
 	private String email;
 	private String role;
+	private String password; // ✅ for login
+    private boolean isAdmin = false; // ✅ for admin check
 	@Lob
 	private String trainingSchedule;
 	
@@ -65,6 +67,20 @@ public class FresherProfile {
 	public void setTrainingProgress(TrainingProgress trainingProgress) {
 		this.trainingProgress = trainingProgress;
 	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+	
+	
 	
 	
 	

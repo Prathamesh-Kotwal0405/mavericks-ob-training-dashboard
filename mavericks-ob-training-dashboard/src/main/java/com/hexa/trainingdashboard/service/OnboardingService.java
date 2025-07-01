@@ -1,5 +1,6 @@
 package com.hexa.trainingdashboard.service;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,6 +17,7 @@ public class OnboardingService {
 	private final TrainingProgressRepository trainingProgressRepository;
 //	private final OllamaService ollamaService;
 	private final AzureOpenAIService aiService;
+	private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
 	public OnboardingService(FresherProfileRepository fresherProfileRepository, AzureOpenAIService aiService, TrainingProgressRepository trainingProgressRepository ) {
 		super();
@@ -54,17 +56,30 @@ public class OnboardingService {
 	
 	public FresherProfile saveProfile(FresherProfile fresherProfile) {	
 		// Create and link TrainingProgress
+		fresherProfile.setPassword(passwordEncoder.encode(fresherProfile.getPassword()));
 	    TrainingProgress progress = new TrainingProgress();
 	    progress.setFresher(fresherProfile); // Link fresher to progress
 	    fresherProfile.setTrainingProgress(progress); // Link progress to fresher
 
 	    // Save fresher only. Hibernate will save progress automatically.
+	    fresherProfile.setAdmin(false);
 	    return fresherProfileRepository.save(fresherProfile);
 	}
 	
 	public FresherProfile setTrainingSchedule(FresherProfile fresherProfile, String plan) {
 		fresherProfile.setTrainingSchedule(plan);
 		return fresherProfileRepository.save(fresherProfile);
+	}
+	
+	public FresherProfile login(String email, String rawPassword) {
+	    FresherProfile fresher = fresherProfileRepository.findByEmail(email)
+	        .orElseThrow(() -> new RuntimeException("User not found"));
+
+	    if (!passwordEncoder.matches(rawPassword, fresher.getPassword())) {
+	        throw new RuntimeException("Invalid password");
+	    }
+
+	    return fresher;
 	}
 	
 	
