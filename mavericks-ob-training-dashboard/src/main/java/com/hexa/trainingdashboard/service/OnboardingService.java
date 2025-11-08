@@ -54,6 +54,29 @@ public class OnboardingService {
 		return aiService.getResponseFromModel(prompt);
 	}
 	
+	public String generateCertificationPlan(FresherProfile fresherProfile) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		String profileJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(fresherProfile);
+		String prompt = """
+				You are an HR onboarding assistant at a software company. Based on the fresher's profile below, suggest **External certification plan** tailored to their specific role.
+
+				Fresher Profile:
+				%s
+
+				Instructions:
+				- Understand the candidate's **role** and **skills**
+				- Customize the plan to match the expectations and learning curve of that role
+				- Break the plan into basic, Intermediate and Advanded certifications.
+				- The plan should be practical for a **new college graduate**
+
+				Output Format:
+				- Title: Recommended Certificates for <role>
+				- Level by level breakdown of certifications.
+				"""
+				.formatted(profileJson);
+		return aiService.getResponseFromModel(prompt);
+	}
+	
 	public FresherProfile saveProfile(FresherProfile fresherProfile) {	
 		// Create and link TrainingProgress
 		fresherProfile.setPassword(passwordEncoder.encode(fresherProfile.getPassword()));

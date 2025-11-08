@@ -49,6 +49,17 @@ public class OnBoardingController {
 		return "Successfully generated onboarding plan for required fresher id";
 	}
 	
+	@GetMapping("/generate-cert-plan/{id}")
+	public String generateCertificationPlan(@PathVariable("id") Long id) throws JsonProcessingException {
+		Optional<FresherProfile> optionalProfile = fresherProfileRepository.findById(id);
+		if(optionalProfile.isEmpty()) {
+			throw new RuntimeException("FresherProfile with ID "+ id +" not found.");
+		}
+		FresherProfile profile = optionalProfile.get();
+		String plan = onboardingService.generateCertificationPlan(profile);
+		return plan;
+	}
+	
 	@GetMapping("/getProfile/{id}")
 	public String getFresherProfileById(@PathVariable("id") Long id) throws JsonProcessingException {
 		Optional<FresherProfile> optionalProfile = fresherProfileRepository.findById(id);
